@@ -3,13 +3,33 @@ FROM ghcr.io/linuxserver/baseimage-alpine:3.13
 # install packages
 RUN \
  echo "**** install build packages ****" && \
+ 
+ apk update && \
+ echo "**** docker-webdav-alpine  download and complile nginx ****" && \
+ apk add --no-cache pcre libxml2 libxslt && \
+    apk add --no-cache apache2-utils && \
+    apk add --no-cache gcc make libc-dev pcre-dev zlib-dev libxml2-dev libxslt-dev && \
+    cd /tmp && \
+    wget https://github.com/nginx/nginx/archive/master.zip -O nginx.zip && \
+    unzip nginx.zip && \
+    wget https://github.com/arut/nginx-dav-ext-module/archive/master.zip -O dav-ext-module.zip && \
+    unzip dav-ext-module.zip && \
+    cd nginx-master && \
+    ./auto/configure --prefix=/opt/nginx --with-http_dav_module --add-module=/tmp/nginx-dav-ext-module-master && \
+    make && make install && \
+    cd /root && \
+    chmod +x /entrypoint.sh && \
+    apk del gcc make libc-dev pcre-dev zlib-dev libxml2-dev libxslt-dev && \
+    rm -rf /var/cache/apk/* && \
+    rm -rf /tmp/* && \ 
+ echo "**** docker-baseimage-alpine-nginx ****" && \
  apk add --no-cache \
 	apache2-utils \
 	git \
 	libressl3.1-libssl \
 	logrotate \
 	nano \
-	nginx \
+#	nginx \
 	openssl \
 	php7 \
 	php7-fileinfo \
