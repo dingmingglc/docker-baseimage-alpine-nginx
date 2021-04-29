@@ -75,14 +75,12 @@ echo "**** docker-baseimage-alpine-nginx ****" && \
     cd nginx-master && \
     ./auto/configure --prefix=/opt/nginx --with-http_dav_module --add-module=/tmp/nginx-dav-ext-module-master && \
     make && make install && \
-    cd /root && \
-    chmod +x /entrypoint.sh && \
+    cd /root && \   
     apk del gcc make libc-dev pcre-dev zlib-dev libxml2-dev libxslt-dev && \
     rm -rf /var/cache/apk/* && \
     rm -rf /tmp/* && \ 
  echo "**** docker-baseimage-alpine-nginx ****" && \
- apk add --no-cache \
-	apache2-utils \
+ apk add --no-cache \	
 	git \
 	libressl3.1-libssl \
 	logrotate \
